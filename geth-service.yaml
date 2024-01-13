@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.31.2 (HEAD)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: geth
+  name: geth
+spec:
+  ports:
+    - name: "8545"
+      port: 8545
+      targetPort: 8545
+    - name: "30303"
+      port: 30303
+      targetPort: 30303
+    - name: 30303-udp
+      port: 30303
+      protocol: UDP
+      targetPort: 30303
+  selector:
+    io.kompose.service: geth
+status:
+  loadBalancer: {}

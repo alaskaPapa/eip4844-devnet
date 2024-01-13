@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.31.2 (HEAD)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: lighthouse
+  name: lighthouse
+spec:
+  ports:
+    - name: "5052"
+      port: 5052
+      targetPort: 5052
+    - name: "5054"
+      port: 5054
+      targetPort: 5054
+    - name: "9000"
+      port: 9000
+      targetPort: 9000
+    - name: 9000-udp
+      port: 9000
+      protocol: UDP
+      targetPort: 9000
+  selector:
+    io.kompose.service: lighthouse
+status:
+  loadBalancer: {}

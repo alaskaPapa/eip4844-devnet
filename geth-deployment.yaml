@@ -1,0 +1,77 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.31.2 (HEAD)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: geth
+  name: geth
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: geth
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert
+        kompose.version: 1.31.2 (HEAD)
+      creationTimestamp: null
+      labels:
+        io.kompose.network/eip4844-devnet-default: "true"
+        io.kompose.service: geth
+    spec:
+      containers:
+        - args:
+            - /usr/local/bin/geth.sh
+          env:
+            - name: EL_P2P_PORT
+              value: "30303"
+          image: geth
+          name: geth
+          ports:
+            - containerPort: 8545
+              hostPort: 8545
+              protocol: TCP
+            - containerPort: 30303
+              hostIP: 0.0.0.0
+              hostPort: 30303
+              protocol: TCP
+            - containerPort: 30303
+              hostIP: 0.0.0.0
+              hostPort: 30303
+              protocol: UDP
+          resources: {}
+          volumeMounts:
+            - mountPath: /db
+              name: geth-data
+            - mountPath: /usr/local/bin/geth.sh
+              name: geth-claim1
+            - mountPath: /config/jwtsecret
+              name: geth-claim2
+            - mountPath: /config/genesis.json
+              name: geth-claim3
+            - mountPath: /config/enodes.list
+              name: geth-claim4
+      restartPolicy: Always
+      volumes:
+        - name: geth-data
+          persistentVolumeClaim:
+            claimName: geth-data
+        - name: geth-claim1
+          persistentVolumeClaim:
+            claimName: geth-claim1
+        - name: geth-claim2
+          persistentVolumeClaim:
+            claimName: geth-claim2
+        - name: geth-claim3
+          persistentVolumeClaim:
+            claimName: geth-claim3
+        - name: geth-claim4
+          persistentVolumeClaim:
+            claimName: geth-claim4
+status: {}
