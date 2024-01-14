@@ -34,7 +34,7 @@ spec:
               value: info
             - name: CL_P2P_PORT
               value: "9000"
-          image: lighthouse
+          image: eip4844-devnet-lighthouse:lastest
           name: lighthouse
           ports:
             - containerPort: 5052
@@ -51,7 +51,13 @@ spec:
               hostIP: 0.0.0.0
               hostPort: 9000
               protocol: UDP
-          resources: {}
+          resources:
+            requests:
+                memory: "500Mi"
+                cpu: "1"
+            limits:
+              memory: "2Gi"
+              cpu: "2"
           volumeMounts:
             - mountPath: /data
               name: lighthouse-data

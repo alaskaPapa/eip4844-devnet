@@ -2,6 +2,11 @@ FROM rust:1.74.0-bullseye AS builder
 RUN apt-get update && apt-get -y upgrade && apt-get install -y cmake clang libclang-dev protobuf-compiler bash
 ARG FEATURES
 
+ENV https_proxy=http://192.168.0.113:7890
+ENV http_proxy=http://192.168.0.113:7890
+ENV all_proxy=socks5://192.168.0.113:7890
+ENV no_proxy=localhost,127.0.0.1
+
 RUN bash -c "git clone https://github.com/sigp/lighthouse.git && cd lighthouse && git checkout unstable && CROSS_PROFILE=maxperf make"
 
 FROM ubuntu:22.04
