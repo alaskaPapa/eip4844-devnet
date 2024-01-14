@@ -34,7 +34,8 @@ spec:
               value: info
             - name: CL_P2P_PORT
               value: "9000"
-          image: eip4844-devnet-lighthouse:lastest
+          image: eip4844-devnet-lighthouse:latest
+          imagePullPolicy: Never
           name: lighthouse
           ports:
             - containerPort: 5052

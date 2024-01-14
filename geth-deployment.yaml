@@ -31,7 +31,8 @@ spec:
           env:
             - name: EL_P2P_PORT
               value: "30303"
-          image: eip4844-devnet-geth:lastest
+          image: eip4844-devnet-geth:latest
+          imagePullPolicy: Never
           name: geth
           ports:
             - containerPort: 8545
@@ -57,6 +58,7 @@ spec:
               name: geth-data
             - mountPath: /usr/local/bin/geth.sh
               name: geth-claim1
+              subPath: geth.sh
             - mountPath: /config/jwtsecret
               name: geth-claim2
             - mountPath: /config/genesis.json
