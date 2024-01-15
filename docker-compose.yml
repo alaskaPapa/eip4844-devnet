@@ -35,6 +35,11 @@ services:
     build:
       context: ./lighthouse
       dockerfile: Dockerfile.lighthouse
+      args:
+        https_proxy: http://192.168.0.113:7890
+        http_proxy: http://192.168.0.113:7890
+        all_proxy: socks5://192.168.0.113:7890
+        no_proxy: localhost,127.0.0.1
     environment:
       - CL_P2P_PORT=${CL_P2P_PORT:-9000}
       - CL_LOG_LEVEL=${CL_LOG_LEVEL:-info}
