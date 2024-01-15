@@ -8,9 +8,9 @@ spec:
     image: busybox
     command: ["/bin/sh", "-c", "sleep 10000"]
     volumeMounts:
-    - name: geth-claim1
-      mountPath: /usr/local/bin/
+    - name: lighthouse-claim1
+      mountPath: /debug
   volumes:
-  - name: geth-claim1
+  - name: lighthouse-claim1
     persistentVolumeClaim:
-      claimName: geth-claim1
+      claimName: lighthouse-claim1

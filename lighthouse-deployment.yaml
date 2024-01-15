@@ -25,6 +25,32 @@ spec:
         io.kompose.network/eip4844-devnet-default: "true"
         io.kompose.service: lighthouse
     spec:
+      initContainers:
+        - name: init-script
+          image: busybox
+          command: 
+            - sh
+            - -c
+            - |
+              cp /config-map/geth.sh /usr/local/bin/geth.sh &&
+              cp /config-map/jwtsecret /config/jwtsecret &&
+              cp /config-map/genesis.json /config/genesis.json &&
+              cp /config-map/enodes.list /config/enodes.list
+          volumeMounts:
+          - name: config-volume
+            mountPath: /config-map
+          - name: geth-claim1
+            mountPath: /usr/local/bin
+            subPath: geth.sh
+          - name: geth-claim2
+            mountPath: /config/jwtsecret
+            subPath: jwtsecret
+          - name: geth-claim3
+            mountPath: /config/genesis.json
+            subPath: genesis.json
+          - name: geth-claim4
+            mountPath: /config/enodes.list
+            subPath: enodes.list
       containers:
         - args:
             - /usr/local/bin/lighthouse.sh
@@ -82,4 +108,7 @@ spec:
         - name: lighthouse-claim3
           persistentVolumeClaim:
             claimName: lighthouse-claim3
+        - name: config-volume
+          configMap:
+            name: eip4844-devnet-config
 status: {}
