@@ -40,16 +40,16 @@ spec:
           - name: config-volume
             mountPath: /config-map
           - name: geth-claim1
-            mountPath: /usr/local/bin
-            subPath: geth.sh
+            mountPath: /usr/local/bin/
+            subPath: lighthouse.sh
           - name: geth-claim2
-            mountPath: /config/jwtsecret
+            mountPath: /config/
             subPath: jwtsecret
           - name: geth-claim3
-            mountPath: /config/genesis.json
+            mountPath: /config/
             subPath: genesis.json
           - name: geth-claim4
-            mountPath: /config/enodes.list
+            mountPath: /config/
             subPath: enodes.list
       containers:
         - args:
@@ -88,8 +88,9 @@ spec:
           volumeMounts:
             - mountPath: /data
               name: lighthouse-data
-            - mountPath: /usr/local/bin/lighthouse.sh
+            - mountPath: /usr/local/bin/
               name: lighthouse-claim1
+              subPath: lighthouse.sh
             - mountPath: /config/testnet
               name: lighthouse-claim2
             - mountPath: /config/jwtsecret

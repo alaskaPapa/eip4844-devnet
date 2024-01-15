@@ -40,7 +40,7 @@ spec:
           - name: config-volume
             mountPath: /config-map
           - name: geth-claim1
-            mountPath: /usr/local/bin
+            mountPath: /usr/local/bin/
             subPath: geth.sh
           - name: geth-claim2
             mountPath: /config/jwtsecret
