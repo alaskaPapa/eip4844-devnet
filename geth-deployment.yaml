@@ -32,25 +32,20 @@ spec:
             - sh
             - -c
             - |
-              cp /config-map/geth.sh /usr/local/bin/geth.sh &&
-              cp /config-map/jwtsecret /config/jwtsecret &&
-              cp /config-map/genesis.json /config/genesis.json &&
-              cp /config-map/enodes.list /config/enodes.list
+              cp /config-map/geth.sh /usr/local/bin/ &&
+              chmod 755 /usr/local/bin/geth.sh &&
+              cp /config-map/jwtsecret /config/ &&
+              cp /config-map/genesis.json /config/ &&
+              cp /config-map/enodes.list /config/
           volumeMounts:
           - name: config-volume
             mountPath: /config-map
           - name: geth-claim1
             mountPath: /usr/local/bin/
-            subPath: geth.sh
-          - name: geth-claim2
-            mountPath: /config/jwtsecret
-            subPath: jwtsecret
-          - name: geth-claim3
-            mountPath: /config/genesis.json
-            subPath: genesis.json
-          - name: geth-claim4
-            mountPath: /config/enodes.list
-            subPath: enodes.list
+            subPath: usr/local/bin/
+          - name: geth-claim1
+            mountPath: /config
+            subPath: config
       containers:
         - args:
             - /usr/local/bin/geth.sh
@@ -84,13 +79,10 @@ spec:
               name: geth-data
             - mountPath: /usr/local/bin/
               name: geth-claim1
-              subPath: geth.sh
-            - mountPath: /config/jwtsecret
-              name: geth-claim2
-            - mountPath: /config/genesis.json
-              name: geth-claim3
-            - mountPath: /config/enodes.list
-              name: geth-claim4
+              subPath: usr/local/bin/
+            - mountPath: /config/
+              name: geth-claim1
+              subPath: config/
       restartPolicy: Always
       volumes:
         - name: geth-data
@@ -99,15 +91,6 @@ spec:
         - name: geth-claim1
           persistentVolumeClaim:
             claimName: geth-claim1
-        - name: geth-claim2
-          persistentVolumeClaim:
-            claimName: geth-claim2
-        - name: geth-claim3
-          persistentVolumeClaim:
-            claimName: geth-claim3
-        - name: geth-claim4
-          persistentVolumeClaim:
-            claimName: geth-claim4
         - name: config-volume
           configMap:
             name: eip4844-devnet-config

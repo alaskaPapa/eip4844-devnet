@@ -10,6 +10,10 @@ spec:
     volumeMounts:
     - name: geth-claim1
       mountPath: /usr/local/bin/
+      subPath: usr/local/bin/
+    - name: geth-claim1
+      mountPath: /config/
+      subPath: config/
   volumes:
   - name: geth-claim1
     persistentVolumeClaim:
