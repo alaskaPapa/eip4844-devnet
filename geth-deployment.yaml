@@ -25,30 +25,28 @@ spec:
         io.kompose.network/eip4844-devnet-default: "true"
         io.kompose.service: geth
     spec:
-      initContainers:
-        - name: init-script
-          image: busybox
-          command: 
-            - sh
-            - -c
-            - |
-              cp /config-map/geth.sh /usr/local/bin/ &&
-              chmod 755 /usr/local/bin/geth.sh &&
-              cp /config-map/jwtsecret /config/ &&
-              cp /config-map/genesis.json /config/ &&
-              cp /config-map/enodes.list /config/
-          volumeMounts:
-          - name: config-volume
-            mountPath: /config-map
-          - name: geth-claim1
-            mountPath: /usr/local/bin/
-            subPath: usr/local/bin/
-          - name: geth-claim1
-            mountPath: /config
-            subPath: config
+      # initContainers:
+      #   - name: init-script
+      #     image: busybox
+      #     command: 
+      #       - sh
+      #       - -c
+      #       - |
+      #         cp /config-map/geth.sh /usr/local/bin/ &&
+      #         chmod 755 /usr/local/bin/geth.sh &&
+      #         cp /config-map/jwtsecret /config/ &&
+      #         cp /config-map/genesis.json /config/ &&
+      #         cp /config-map/enodes.list /config/
+      #     volumeMounts:
+      #     - name: config-volume
+      #       mountPath: /config-map
       containers:
-        - args:
-            - /usr/local/bin/geth.sh
+        - command: ["/bin/sh", "-c"]
+          args:
+            - |
+              cp /tmp/geth.sh /usr/local/bin/geth.sh &&
+              chmod 755 /usr/local/bin/geth.sh &&
+              /usr/local/bin/geth.sh
           env:
             - name: EL_P2P_PORT
               value: "30303"
@@ -77,20 +75,23 @@ spec:
           volumeMounts:
             - mountPath: /db
               name: geth-data
-            - mountPath: /usr/local/bin/
-              name: geth-claim1
-              subPath: usr/local/bin/
-            - mountPath: /config/
-              name: geth-claim1
-              subPath: config/
+            - name: config-volume
+              mountPath: /tmp/geth.sh
+              subPath: geth.sh
+            - name: config-volume
+              mountPath: /config/jwtsecret
+              subPath: jwtsecret
+            - name: config-volume
+              mountPath: /config/genesis.json
+              subPath: genesis.json
+            - name: config-volume
+              mountPath: /config/enodes.list
+              subPath: enodes.list
       restartPolicy: Always
       volumes:
         - name: geth-data
           persistentVolumeClaim:
             claimName: geth-data
-        - name: geth-claim1
-          persistentVolumeClaim:
-            claimName: geth-claim1
         - name: config-volume
           configMap:
             name: eip4844-devnet-config

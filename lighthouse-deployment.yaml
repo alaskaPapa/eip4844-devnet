@@ -25,30 +25,13 @@ spec:
         io.kompose.network/eip4844-devnet-default: "true"
         io.kompose.service: lighthouse
     spec:
-      initContainers:
-        - name: init-script
-          image: busybox
-          command: 
-            - sh
-            - -c
-            - |
-              cp /config-map/lighthouse.sh /usr/local/bin/ &&
-              chmod 755 /usr/local/bin/lighthouse.sh
-              cp /config-map/jwtsecret /config/ &&
-              cp /config-map/genesis.json /config/ &&
-              cp /config-map/enodes.list /config/
-          volumeMounts:
-          - name: config-volume
-            mountPath: /config-map
-          - name: geth-claim1
-            mountPath: /usr/local/bin/
-            subPath: usr/local/bin/
-          - name: geth-claim1
-            mountPath: /config
-            subPath: config
       containers:
-        - args:
-            - /usr/local/bin/lighthouse.sh
+        - command: ["/bin/sh", "-c"]
+          args:
+            - |
+              cp /tmp/lighthouse.sh /usr/local/bin/lighthouse.sh &&
+              chmod 755 /usr/local/bin/lighthouse.sh &&
+              /usr/local/bin/lighthouse.sh
           env:
             - name: CHECKPOINT_SYNC_URL
             - name: CL_LOG_LEVEL
@@ -83,19 +66,26 @@ spec:
           volumeMounts:
             - mountPath: /data
               name: lighthouse-data
-            - mountPath: /usr/local/bin/
-              name: geth-claim1
-              subPath: usr/local/bin/
-            - mountPath: /config/
-              name: geth-claim1
+            - name: config-volume
+              mountPath: /tmp/lighthouse.sh
+              subPath: lighthouse.sh
+            - name: config-volume
+              mountPath: /config/jwtsecret
+              subPath: jwtsecret
+            - name: config-volume
+              mountPath: /config/genesis.json
+              subPath: genesis.json
+            - name: config-volume
+              mountPath: /config/enodes.list
+              subPath: enodes.list
       restartPolicy: Always
       volumes:
         - name: lighthouse-data
           persistentVolumeClaim:
             claimName: lighthouse-data
-        - name: geth-claim1
-          persistentVolumeClaim:
-            claimName: geth-claim1
+        # - name: geth-claim1
+        #   persistentVolumeClaim:
+        #     claimName: geth-claim1
         - name: config-volume
           configMap:
             name: eip4844-devnet-config
