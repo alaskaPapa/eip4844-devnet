@@ -6,8 +6,8 @@ metadata:
     kompose.version: 1.31.2 (HEAD)
   creationTimestamp: null
   labels:
-    io.kompose.service: lighthouse
-  name: lighthouse
+    io.kompose.service: lighthouse-container
+  name: lighthouse-container
 spec:
   ports:
     - name: "5052"
@@ -24,6 +24,6 @@ spec:
       protocol: UDP
       targetPort: 9000
   selector:
-    io.kompose.service: lighthouse
+    io.kompose.service: lighthouse-container
 status:
   loadBalancer: {}

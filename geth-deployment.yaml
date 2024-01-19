@@ -6,13 +6,13 @@ metadata:
     kompose.version: 1.31.2 (HEAD)
   creationTimestamp: null
   labels:
-    io.kompose.service: geth
-  name: geth
+    io.kompose.service: geth-container
+  name: geth-container
 spec:
   replicas: 1
   selector:
     matchLabels:
-      io.kompose.service: geth
+      io.kompose.service: geth-container
   strategy:
     type: Recreate
   template:
@@ -23,23 +23,8 @@ spec:
       creationTimestamp: null
       labels:
         io.kompose.network/eip4844-devnet-default: "true"
-        io.kompose.service: geth
+        io.kompose.service: geth-container
     spec:
-      # initContainers:
-      #   - name: init-script
-      #     image: busybox
-      #     command: 
-      #       - sh
-      #       - -c
-      #       - |
-      #         cp /config-map/geth.sh /usr/local/bin/ &&
-      #         chmod 755 /usr/local/bin/geth.sh &&
-      #         cp /config-map/jwtsecret /config/ &&
-      #         cp /config-map/genesis.json /config/ &&
-      #         cp /config-map/enodes.list /config/
-      #     volumeMounts:
-      #     - name: config-volume
-      #       mountPath: /config-map
       containers:
         - command: ["/bin/sh", "-c"]
           args:
@@ -50,9 +35,13 @@ spec:
           env:
             - name: EL_P2P_PORT
               value: "30303"
+            - name: CL_P2P_PORT
+              value: "9000"
+            - name: GETH_PORT
+              value: "8545"
           image: eip4844-devnet-geth:latest
           imagePullPolicy: Never
-          name: geth
+          name: geth-container
           ports:
             - containerPort: 8545
               hostPort: 8545
@@ -74,7 +63,7 @@ spec:
               cpu: "2"
           volumeMounts:
             - mountPath: /db
-              name: geth-data
+              name: geth-container-data
             - name: config-volume
               mountPath: /tmp/geth.sh
               subPath: geth.sh
@@ -89,9 +78,9 @@ spec:
               subPath: enodes.list
       restartPolicy: Always
       volumes:
-        - name: geth-data
+        - name: geth-container-data
           persistentVolumeClaim:
-            claimName: geth-data
+            claimName: geth-container-data
         - name: config-volume
           configMap:
             name: eip4844-devnet-config

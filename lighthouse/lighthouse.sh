@@ -1,5 +1,8 @@
 #!/bin/sh
 
+ls -l /cl-config-volume/source
+ls -l /config/testnet
+
 if [ -n "${CHECKPOINT_SYNC_URL}" ]; then
   checkpoint_sync="--checkpoint-sync-url=${CHECKPOINT_SYNC_URL}"
 else

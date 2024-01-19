@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: cl-config-pv
+  labels:
+    type: local
+spec:
+  capacity:
+    storage: 20Mi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    # path: "./cl_config"
+    path: "/Users/hhliu/workspace/k8s_application/eip4844-devnet/cl_config"
+    

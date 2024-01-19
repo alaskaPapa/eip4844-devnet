@@ -1,7 +1,5 @@
 #!/bin/sh
 
-ls /usr/local/bin
-
 geth init  --datadir /db /config/genesis.json
 
 bootnodes=$(cat /config/enodes.list)

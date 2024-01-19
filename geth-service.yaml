@@ -6,8 +6,8 @@ metadata:
     kompose.version: 1.31.2 (HEAD)
   creationTimestamp: null
   labels:
-    io.kompose.service: geth
-  name: geth
+    io.kompose.service: geth-container
+  name: geth-container
 spec:
   ports:
     - name: "8545"
@@ -21,6 +21,6 @@ spec:
       protocol: UDP
       targetPort: 30303
   selector:
-    io.kompose.service: geth
+    io.kompose.service: geth-container
 status:
   loadBalancer: {}
