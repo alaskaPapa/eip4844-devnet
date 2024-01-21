@@ -39,6 +39,14 @@ spec:
               value: "9000"
             - name: GETH_PORT
               value: "8545"
+            - name: HTTPS_PROXY
+              value: "http://192.168.0.113:7890"
+            - name: HTTP_PROXY
+              value: "http://192.168.0.113:7890"
+            - name: ALL_PROXY
+              value: "socks5://192.168.0.113:7890"
+            - name: NO_PROXY
+              value: "localhost,127.0.0.1,10.*"
           image: eip4844-devnet-geth:latest
           imagePullPolicy: Never
           name: geth-container

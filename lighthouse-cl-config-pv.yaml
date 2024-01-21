@@ -4,12 +4,15 @@ metadata:
   name: cl-config-pv
   labels:
     type: local
+    my-custom-label: my-pv
 spec:
   capacity:
-    storage: 20Mi
+    storage: 10Mi
   accessModes:
     - ReadWriteOnce
   hostPath:
     # path: "./cl_config"
     path: "/Users/hhliu/workspace/k8s_application/eip4844-devnet/cl_config"
-    
+  claimRef:
+    namespace: default  # 确保这是 PVC 所在的命名空间
+    name: cl-config-pvc
